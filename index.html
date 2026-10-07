@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Crash NST Save Generator</title>
+    <link rel="stylesheet" href="css/generator.css">
+</head>
+
+<body>
+    <main>
+        <header>
+            <h1>Crash NST Save Generator</h1>
+            <label for="language" class="sr-only" data-i18n="language"></label>
+            <select id="language" data-i18n-aria="language">
+                <option value="en">English</option>
+                <option value="ja">日本語</option>
+            </select>
+        </header>
+        <section class="panel">
+            <h2 data-i18n="newOpen"></h2>
+            <div class="actions"><select id="game" data-i18n-aria="newGame">
+                    <option value="1">Crash 1</option>
+                    <option value="2">Crash 2</option>
+                    <option value="3">Crash 3</option>
+                </select><button id="generate" class="primary" data-i18n="generate"></button><label for="file"
+                    class="file-label" data-i18n="open"></label><input id="file" type="file" accept=".sav"
+                    class="hidden">
+            </div>
+        </section>
+        <div id="workspace" class="hidden">
+            <section class="panel">
+                <h2 id="filename"></h2>
+                <div class="metrics" id="metrics"></div>
+                <div class="actions"><button id="save" class="primary" data-i18n="save"></button><button id="calculate"
+                        data-i18n="calculate"></button><button id="reset" data-i18n="reset"></button><button id="backup"
+                        data-i18n="backup"></button><span class="pill" id="changes-count"></span></div>
+                <div class="note hidden" id="calculation-note"></div>
+            </section>
+            <nav data-i18n-aria="navLabel"><button data-tab="basic" aria-selected="true"
+                    data-i18n="basic"></button><button data-tab="stages" aria-selected="false"
+                    data-i18n="stages"></button><button data-tab="aku" aria-selected="false"
+                    data-i18n="aku"></button><button data-tab="events" aria-selected="false"
+                    data-i18n="events"></button></nav>
+            <section class="panel" id="basic">
+                <h2 data-i18n="basic"></h2>
+                <div class="section-content"><label for="farthest" data-i18n="farthest"></label><select id="farthest"
+                    data-i18n-aria="farthest"></select><label for="previous" data-i18n="previous"></label><select
+                    id="previous" data-i18n-aria="previous"></select>
+                <div class="grid" id="summary-fields"></div>
+                <label class="check hidden" id="bonus-wrap" for="bonus-gem"><input type="checkbox" id="bonus-gem"><span
+                        data-i18n="bonus"></span></label>
+                </div>
+                <h3 data-i18n="colorGems"></h3>
+                <div class="grid section-content" id="gem-fields"></div>
+                <h3 data-i18n="secretWarpRoom"></h3>
+                <div class="grid section-content" id="secret-fields"></div>
+                <h3 data-i18n="upgrades"></h3>
+                <div class="grid section-content" id="upgrade-fields"></div>
+                <h3 data-i18n="gameVariables"></h3>
+                <div class="grid section-content" id="game-variable-fields"></div>
+            </section>
+            <section class="panel hidden" id="stages">
+                <h2 data-i18n="stagesTitle"></h2>
+                <div class="stage-layout">
+                    <div>
+                        <div class="actions"><button id="select-all" data-i18n="selectAll"></button><button
+                                id="select-none" data-i18n="selectNone"></button></div><input type="search"
+                            id="stage-search" class="search" data-i18n-aria="searchStages"
+                            data-i18n-placeholder="searchStagesPlaceholder">
+                        <div class="stage-list-head"><span data-i18n="stageColumn"></span><span
+                                data-i18n="statusColumn"></span><span data-i18n="itemsColumn"></span></div>
+                        <div class="stage-list" id="stage-list" role="group" data-i18n-aria="stageList"></div>
+                    </div>
+                    <div>
+                        <section>
+                            <h3><span data-i18n="bulkTitle"></span> <span class="pill" id="selected-count"></span></h3>
+                            <div class="actions"><select id="bulk-clear" data-i18n-aria="bulkClear">
+                                    <option value="keep" data-i18n="bulkClearKeep"></option>
+                                    <option value="yes" data-i18n="clear"></option>
+                                    <option value="no" data-i18n="uncleared"></option>
+                                </select><select id="bulk-relic" data-i18n-aria="bulkRelic">
+                                    <option value="keep" data-i18n="bulkRelicKeep"></option>
+                                    <option value="0" data-i18n="none"></option>
+                                    <option value="3" data-item-name="platinum">Platinum</option>
+                                    <option value="2" data-item-name="gold">Gold</option>
+                                    <option value="1" data-item-name="sapphire">Sapphire</option>
+                                </select></div>
+                            <div class="collectibles" id="bulk-flags"></div>
+                            <div class="actions"><button id="apply-bulk" class="primary"
+                                    data-i18n="applyBulk"></button><button id="all-items" data-i18n="allItems"></button>
+                            </div>
+                        </section>
+                        <hr style="border:0;border-top:1px solid var(--line);margin:26px 0">
+                        <section id="stage-detail"></section>
+                    </div>
+                </div>
+            </section>
+            <section class="panel hidden" id="aku">
+                <h2 data-i18n="aku"></h2>
+                <div class="actions"><button id="aku-reset" data-i18n="akuReset"></button></div>
+                <div class="aku-layout">
+                    <div><input id="death-search" type="search" class="search" data-i18n-aria="searchAku"
+                            data-i18n-placeholder="searchAkuPlaceholder">
+                        <div class="aku-list-head"><span data-i18n="stageColumn"></span><span data-i18n="spawn"></span>
+                        </div>
+                        <div id="aku-stage-list" class="stage-list aku-stage-list" role="group"
+                            data-i18n-aria="akuStageList"></div>
+                    </div>
+                    <div id="death-fields"></div>
+                </div>
+            </section>
+            <section class="panel hidden" id="events">
+                <h2 data-i18n="events"></h2>
+                <h3 data-i18n="eventFlags"></h3>
+                <div class="grid section-content" id="event-fields"></div>
+                <h3 data-i18n="cutscenes"></h3>
+                <div class="actions section-content"><button id="cuts-on" data-i18n="allOn"></button><button id="cuts-off"
+                        data-i18n="allOff"></button></div>
+                <div class="stack section-content" id="cutscenes"></div>
+                <h3 data-i18n="hintDisplay"></h3>
+                <div class="actions section-content"><button id="hints-on" data-i18n="allOn"></button><button id="hints-off"
+                        data-i18n="allOff"></button></div>
+                <div class="grid section-content" id="hint-fields"></div>
+            </section>
+        </div>
+    </main>
+    <dialog id="discard-dialog" aria-labelledby="discard-question">
+        <form method="dialog">
+            <p id="discard-question" data-i18n="discardConfirm"></p>
+            <div class="actions"><button value="generate" class="primary" data-i18n="discardGenerate"></button><button
+                    value="cancel" autofocus data-i18n="cancel"></button></div>
+        </form>
+    </dialog>
+    <dialog id="aku-reset-dialog" aria-labelledby="aku-reset-question">
+        <form method="dialog">
+            <p id="aku-reset-question" data-i18n="akuResetConfirm"></p>
+            <div class="actions"><button value="reset" class="primary" data-i18n="akuReset"></button><button
+                    value="cancel" autofocus data-i18n="cancel"></button></div>
+        </form>
+    </dialog>
+    <script src="js/nst-save.js"></script>
+    <script src="js/game-records.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/format-scaffolds.js"></script>
+    <script src="js/factory-save.js"></script>
+    <script src="js/level-names.js"></script>
+    <script src="js/generator-ui.js"></script>
+    <script src="js/stage-selection.js"></script>
+    <script src="js/builder.js"></script>
+</body>
+
+</html>
